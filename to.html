@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="to2.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+</head>
+<body>
+    <div class="all">
+
+
+        <div class="mainForm">
+            <h1 class="titl">to do list mohammed</h1>
+            <div class="form">
+                <div class="toimput">
+                <input type="text" id="inputt"> 
+                <input type="time" id="input_date">
+            </div>
+                <button class="add" id="todoAdd" onclick="addto();">Add</button>
+            </div>
+
+            <ul id="ul"></ul>
+
+        </div>
+
+
+
+    </div>
+
+
+
+
+
+    <script >
+               function gettodosave(){
+    const todoitems= localStorage.getItem('todolistt');
+    todoarry = JSON.parse(todoitems) || [];
+    display();
+     console.log();
+ }
+ gettodosave();
+ var todoarry = []; seelectinex=-1;
+ function addto(){
+    const inputtodo= document.getElementById("inputt");
+    const inputdatee =document.getElementById("input_date");
+    
+
+    if(seelectinex >= 0){
+     todoarry[seelectinex].Text=inputtodo.value;
+     seelectinex=-1;
+     document.getElementById("todoAdd").innerHTML='Add';
+     document.getElementById("todoAdd").classList.remove('edddit');
+    }else {
+     todoarry.push({Text:inputtodo.value,date:inputdatee.value ,isDone: false});
+    }
+
+     inputtodo.value='';
+    display();
+    saveitem();
+ }
+
+ function saveitem(){
+     const todoinput = JSON.stringify(todoarry);
+     localStorage.setItem('todolistt',todoinput);
+ }
+
+ function display(){
+      document.getElementById("ul").innerHTML='';
+     todoarry.forEach((item,index)=>{
+         appendtodo(item,index);
+     })
+ }
+
+ function appendtodo(item,index){
+     const todolist = document.getElementById("ul");
+     const todoitem = document.createElement("li");
+     todoitem.setAttribute('class','altodoitem');
+
+     if(item.isDone){
+         todoitem.classList.add('aaa');
+     }
+     
+     
+
+     const todotext = '<span class="todotextt">'+ item.Text+'</span>';
+     const removeitems = '<i class="fa fa-close" onclick="removee(' + index + ')"></i>';
+     const markasdone = '<i  class="fa fa-check" onclick="markdone(' + index + ')"></i>';
+     const editem = '<i  class="fa fa-edit" onclick="edit(' + index + ')"></i>';
+     //const inputdatee =document.getElementById("input_date");
+     const space = '<span class="space"></span>';
+     const date ='<span class="ss">'+ item.date+'</span>';
+
+      
+     todoitem.innerHTML = todotext+date+space +editem+ removeitems +markasdone;
+     todolist.appendChild(todoitem);
+ }
+
+ function removee(index){
+     todoarry.splice(index,1);
+     display();
+     saveitem();
+     
+ }
+
+ function markdone(index){
+     todoarry[index].isDone =!todoarry[index].isDone;
+     console.log("marke====",todoarry[index]);
+     display();
+     saveitem();
+ }
+ function edit(index){
+     seelectinex=index;
+     document.getElementById("inputt").value=todoarry[index].Text;
+     document.getElementById("todoAdd").innerHTML='Edit';
+     document.getElementById("todoAdd").classList.add('edddit');
+     console.log("dddd",seelectinex);
+ }
+
+
+    </script>
+</body>
+</html>
